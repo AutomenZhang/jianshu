@@ -1,66 +1,68 @@
-import React,{Component} from 'react'
+import React from 'react'
 import {CSSTransition} from 'react-transition-group'
+import {connect} from 'react-redux'
 import {HeaderWrapper,Logo,Nav,NavItem,SearchWarpper,NavSearch,Addition,Button}  from "./style";
 
-class Header extends Component{
-    constructor(props){
-        super(props);
-        this.state = {
-            focus:false
-        }
-        this.handleInputFocus = this.handleInputFocus.bind(this);
-        this.handleInputBlur = this.handleInputBlur.bind(this);
-    }
-    render() {
-        return (
-            <div>
-                <HeaderWrapper>
-                    <Logo></Logo>
-                    <Nav>
-                        <NavItem className='left active'>首页</NavItem>
-                        <NavItem className='left'>下载APP</NavItem>
-                        <NavItem className='right'>登录</NavItem>
-                        <NavItem className='right'>
-                            <i className="iconfont">&#xe636;</i>
-                        </NavItem>
-                        <SearchWarpper>
-                            <CSSTransition
-                                in={this.state.focus}
-                                timeout={200}
-                                classNames='slide'
+const Header = (props) =>{
+    return(
+        <div>
+            <HeaderWrapper>
+                <Logo></Logo>
+                <Nav>
+                    <NavItem className='left active'>首页</NavItem>
+                    <NavItem className='left'>下载APP</NavItem>
+                    <NavItem className='right'>登录</NavItem>
+                    <NavItem className='right'>
+                        <i className="iconfont">&#xe636;</i>
+                    </NavItem>
+                    <SearchWarpper>
+                        <CSSTransition
+                            in={props.focus}
+                            timeout={200}
+                            classNames='slide'
+                        >
+                            <NavSearch
+                                className={props.focus?'focused':''}
+                                onFocus={props.handleInputFocus}
+                                onBlur={props.handleInputBlur}
                             >
-                                <NavSearch
-                                    className={this.state.focus?'focused':''}
-                                    onFocus={this.handleInputFocus}
-                                    onBlur={this.handleInputBlur}
-                                >
-                                </NavSearch>
-                            </CSSTransition>
-                            <i className={this.state.focus?'focused iconfont':'iconfont'}
-                            >&#xe62b;</i>
-                        </SearchWarpper>
-                    </Nav>
-                    <Addition>
-                        <Button className='write'>
-                            <i className="iconfont">&#xe615;</i>
-                            写文章
-                        </Button>
-                        <Button className='reg'>注册</Button>
-                    </Addition>
-                </HeaderWrapper>
-            </div>
-        );
+                            </NavSearch>
+                        </CSSTransition>
+                        <i className={props.focus?'focused iconfont':'iconfont'}
+                        >&#xe62b;</i>
+                    </SearchWarpper>
+                </Nav>
+                <Addition>
+                    <Button className='write'>
+                        <i className="iconfont">&#xe615;</i>
+                        写文章
+                    </Button>
+                    <Button className='reg'>注册</Button>
+                </Addition>
+            </HeaderWrapper>
+        </div>
+    );
+}
+const mapStateToProps = (state) =>{
+    return{
+        focus:state.header.focus
     }
-    handleInputFocus (){
-        this.setState({
-            focus:true
-        })
-    }
-    handleInputBlur (){
-        this.setState({
-            focus:false
-        })
+}
+const mapDispatchToProps = (dispatch) =>{
+    return{
+        handleInputFocus(){
+            const action={
+                type:'search_focus'
+            }
+            dispatch(action);
+        },
+        handleInputBlur(){
+            const action={
+                type:'search_blur'
+            }
+            dispatch(action);
+        }
     }
 }
 
-export default Header;
+export default connect(mapStateToProps,mapDispatchToProps)(Header);
