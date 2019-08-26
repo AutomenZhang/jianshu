@@ -8,25 +8,31 @@ import {HeaderWrapper,Logo,Nav,NavItem,SearchWarpper,NavSearch,Addition,Button,
 
 class Header extends Component{
     getInfoList(){
-        const {focus,list} = this.props;
-        if(focus){
+        const {focus,list,page,totalPage,mouseIn,handleMouseEnter,handleMouseLeave,handleChangePage} = this.props;
+        const pageList=[];
+        const newList = list.toJS();
+        if(newList.length) {
+            for (let i = page * 10; i < (page + 1) * 10; i++) {
+                pageList.push(
+                    <SearchInfoItem key={newList[i]}>{newList[i]}</SearchInfoItem>
+                )
+            }
+        }
+        if(focus || mouseIn){
             return (
-                <SearchInfo>
+                <SearchInfo
+                    onMouseEnter={handleMouseEnter}
+                    onMouseLeave={handleMouseLeave}
+                >
                     <SearchTitle>
                         热门搜索
-                        <SearchSwitch>
+                        <SearchSwitch onClick={()=>handleChangePage(page,totalPage,this.spinIcon)}>
+                            <i ref={(icon)=>{this.spinIcon = icon}} className="iconfont spin">&#xe851;</i>
                             换一批
                         </SearchSwitch>
                     </SearchTitle>
                     <SearchInfoList>
-                        <SearchInfoItem>
-                            教育
-                        </SearchInfoItem>
-                        {
-                            list.map((item)=>{
-                                return <SearchInfoItem key={item}>{item}</SearchInfoItem>
-                            })
-                        }
+                        {pageList}
                     </SearchInfoList>
                 </SearchInfo>
             )
@@ -60,7 +66,7 @@ class Header extends Component{
                                 >
                                 </NavSearch>
                             </CSSTransition>
-                            <i className={focus?'focused iconfont':'iconfont'}
+                            <i className={focus?'focused iconfont zoom':'iconfont zoom'}
                             >&#xe62b;</i>
                             {this.getInfoList()}
                         </SearchWarpper>
@@ -80,7 +86,10 @@ class Header extends Component{
 const mapStateToProps = (state) =>{
     return{
         focus:state.getIn(['header','focus']),
-        list:state.getIn(['header','list'])
+        list:state.getIn(['header','list']),
+        page:state.getIn(['header','page']),
+        totalPage:state.getIn(['header','totalPage']),
+        mouseIn:state.getIn(['header','mouseIn'])
     }
 }
 const mapDispatchToProps = (dispatch) =>{
@@ -91,6 +100,26 @@ const mapDispatchToProps = (dispatch) =>{
         },
         handleInputBlur(){
             dispatch(actionCreator.searchBlur());
+        },
+        handleMouseEnter(){
+            dispatch(actionCreator.mouseEnter());
+        },
+        handleMouseLeave(){
+            dispatch(actionCreator.mouseLeave());
+        },
+        handleChangePage(page,totalPage,spin){
+            let originAngel = spin.style.transform.replace(/[^0-9]/ig,'');
+            if(originAngel){
+                originAngel = parseInt(originAngel,10);
+            }else{
+                originAngel = 0;
+            }
+            spin.style.transform ='rotate('+(originAngel+360)+'deg)';
+            if(page<totalPage-1){
+                dispatch(actionCreator.changePage(page+1));
+            }else{
+                dispatch(actionCreator.changePage(0));
+            }
         }
     }
 }
