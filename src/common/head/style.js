@@ -125,6 +125,7 @@ export const SearchInfoItem = styled.a`
 export const SearchSwitch = styled.span`
     float:right;
     font-size:13px;
+    cursor:pointer;
     .spin{
         display:block;
         float:left;
