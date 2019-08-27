@@ -26,6 +26,6 @@ class Topic extends Component{
     }
 }
 const mapState = (state) =>({
-    list:state.get('home').get('topicList')
+    list:state.getIn(['home','topicList'])
 });
 export  default connect(mapState,null)(Topic);
