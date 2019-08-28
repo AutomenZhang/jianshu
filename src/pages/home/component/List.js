@@ -1,11 +1,12 @@
 import React,{Component} from 'react';
-import {ListItem,ListInfo}from '../style'
+import {ListItem, ListInfo, LoadMore} from '../style'
 import {connect} from 'react-redux'
+import {actionCreators} from "../store";
 
 
 class List extends Component{
     render(){
-        const {list} = this.props;
+        const {list,getMoreList} = this.props;
         return(
             <div>
                 {
@@ -25,6 +26,7 @@ class List extends Component{
                       )
                     })
                 }
+                <LoadMore onClick={getMoreList}>阅读更多</LoadMore>
             </div>
         )
     }
@@ -32,4 +34,11 @@ class List extends Component{
 const mapState =  (state)=>({
     list:state.getIn(['home','articleList'])
 })
-export  default connect(mapState,null)(List);
+const mapDisPatch = (dispatch) =>({
+    getMoreList() {
+        const action = actionCreators.getMoreList();
+        dispatch(action)
+    }
+})
+
+export  default connect(mapState,mapDisPatch)(List);

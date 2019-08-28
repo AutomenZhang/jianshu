@@ -1,46 +1,19 @@
 import {fromJS} from 'immutable'
+import * as constants  from  './constants'
 
 const defaultState= fromJS({
-    topicList:[{
-        id:1,
-        title:'社会热点',
-        imgUrl:'https://upload-images.jianshu.io/upload_images/13638982-4c7adfc7bc2003d6?imageMogr2/auto-orient/strip|imageView2/1/w/360/h/240'
-    },{
-        id:2,
-        title:'手绘',
-        imgUrl:'https://upload-images.jianshu.io/upload_images/1521845-1b912a22cb30ca22.jpg?imageMogr2/auto-orient/strip|imageView2/1/w/360/h/240'
-    },{
-        id:3,
-        title:'军工国防',
-        imgUrl:'http://img1.imgtn.bdimg.com/it/u=2493007760,68479721&fm=26&gp=0.jpg'
-    }],
-    articleList:[{
-        id:1,
-        title:'我娶了穷人家的女孩',
-        des:'1 苏欣瑜说，她原本叫苏余，多余的余，她妹妹叫苏没，没了的没。 她记得，在她六岁的那一年，家里来了一伙人，说是她家超生，把她家里全搬了空，苏妈妈...',
-        imgUrl:'https://upload-images.jianshu.io/upload_images/3534836-3bc60b2a4cb32ad2.jpg?imageMogr2/auto-orient/strip|imageView2/1/w/360/h/240'
-    },{
-        id:2,
-        title:'军工国防',
-        des:'苏欣瑜说，她原本叫苏余，多余的余，她妹妹叫苏没，没了的没。 她记得，在她六岁的那一年，家里来了一伙人，说是她家超生，把她家里全搬了空，苏妈妈...',
-        imgUrl:'http://img1.imgtn.bdimg.com/it/u=2493007760,68479721&fm=26&gp=0.jpg'
-    },{
-        id:3,
-        title:'我娶了穷人家的女孩',
-        des:'1 苏欣瑜说，她原本叫苏余，多余的余，她妹妹叫苏没，没了的没。 她记得，在她六岁的那一年，家里来了一伙人，说是她家超生，把她家里全搬了空，苏妈妈...',
-        imgUrl:'https://upload-images.jianshu.io/upload_images/3534836-3bc60b2a4cb32ad2.jpg?imageMogr2/auto-orient/strip|imageView2/1/w/360/h/240'
-    }
-    ],
-    recommendList:[{
-        id:1,
-        imgUrl:'https://cdn2.jianshu.io/assets/web/banner-s-club-aa8bdf19f8cf729a759da42e4a96f366.png'
-    },{
-        id:2,
-        imgUrl:'https://cdn2.jianshu.io/assets/web/banner-s-6-c4d6335bfd688f2ca1115b42b04c28a7.png'
-    }]
+    topicList:[],
+    articleList:[],
+    recommendList:[]
 });
 export default (state=defaultState,action)=>{
     switch (action.type) {
+        case constants.ChANGE_HOME_DATA:
+            return state.merge({
+                'topicList':fromJS(action.topicList),
+                'articleList':fromJS(action.articleList),
+                'recommendList':fromJS(action.recommendList)
+            });
         default:
             return  state;
     }
