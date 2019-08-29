@@ -4,10 +4,13 @@ import Topic from './component/Topic';
 import List from './component/List';
 import Recommend from './component/Recommend';
 import Writer from './component/Writer';
-import {HomeWrapper,HomeLeft,HomeRight} from './style'
+import {HomeWrapper,HomeLeft,HomeRight,BackTop} from './style'
 import { actionCreators } from './store'
 
 class Home extends Component{
+    handleScrollTop(){
+        window.scrollTo(0,0);
+    }
     render(){
         return(
             <div>
@@ -24,20 +27,37 @@ class Home extends Component{
                         <Recommend></Recommend>
                         <Writer></Writer>
                     </HomeRight>
+                    {this.props.showTop? <BackTop onClick={this.handleScrollTop}>回到顶部</BackTop>:null}
                 </HomeWrapper>
             </div>
         )
     }
     componentDidMount() {
         this.props.changeHomeData();
+        this.bindEvent();
+    }
+    componentWillUnmount() {
+        window.removeEventListener('scroll',this.props.toggleScroll);
+    }
+    bindEvent(){
+        window.addEventListener('scroll',this.props.toggleScroll);
     }
 }
+const mapState = (state) =>({
+    showTop:state.getIn(['home','showTop'])
+});
 const mapDisPatch = (dispatch) =>{
    return{
        changeHomeData(){
-           const action = actionCreators.getHomeInfo();
-           dispatch(action);
+           dispatch(actionCreators.getHomeInfo());
+       },
+       toggleScroll(){
+           if(document.documentElement.scrollTop>200){
+               dispatch(actionCreators.toggleTop(true))
+           }else{
+               dispatch(actionCreators.toggleTop(false))
+           }
        }
    }
 };
-export  default connect(null,mapDisPatch)(Home);
+export  default connect(mapState,mapDisPatch)(Home);

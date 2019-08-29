@@ -101,3 +101,15 @@ export const WriterWrapper = styled.div`
     line-height:300px;
     text-align:center;
 `;
+export const BackTop = styled.div`
+    position:fixed;
+    right:100px;
+    bottom:100px;
+    width:60px;
+    height:60px;
+    line-height:60px;
+    border:1px solid #dadada;
+    text-align:center;
+    font-size:14px;
+    cursor:pointer;
+`;
