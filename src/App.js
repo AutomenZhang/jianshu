@@ -12,12 +12,12 @@ function App() {
   return (
     <div>
         <Provider store={store}>
-            <Header />
             <GlobalStyle/>
             <IconFont/>
             <BrowserRouter>
-                <Route path='/' exact component={Home}></Route>
-                <Route path='/detail' exact component={Detail}></Route>
+                <Header />
+                <Route path='/' exact component={Home} />
+                <Route path='/detail/:id' exact component={Detail} />
             </BrowserRouter>
         </Provider>
     </div>
